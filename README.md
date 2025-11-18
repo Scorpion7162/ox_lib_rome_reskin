@@ -1,3 +1,11 @@
+# Scorpion's notice:
+
+This is a redesign made by rome scripts who decide to charge 30 Euros for this reskin. I am exercising my right from the license (LGPL 3.0) To post this publicly with all the source code available. 
+
+P.S. Resellers suck, make your own stuff (and enjoy this reskin) 
+
+
+
 # ox_lib
 
 A FiveM library and resource implementing reusable modules, methods, and UI elements.
