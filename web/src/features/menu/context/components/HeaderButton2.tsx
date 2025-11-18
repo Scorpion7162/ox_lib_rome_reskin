@@ -27,12 +27,12 @@ const useStyles = createStyles((theme, params: { canClose?: boolean }) => ({
   },
 }));
 
-const HeaderButton: React.FC<Props> = ({ icon, canClose, iconSize, handleClick }) => {
+const HeaderButton2: React.FC<Props> = ({ icon, canClose, iconSize, handleClick }) => {
   const { classes } = useStyles({ canClose });
 
   return (
     <button
-      className={"headerButton"}
+      className={"headerButton2"}
       disabled={canClose === false}
       onClick={handleClick}
     >
@@ -41,4 +41,4 @@ const HeaderButton: React.FC<Props> = ({ icon, canClose, iconSize, handleClick }
   );
 };
 
-export default HeaderButton;
+export default HeaderButton2;

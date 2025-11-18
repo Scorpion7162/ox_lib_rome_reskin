@@ -19,7 +19,7 @@ const Dev: React.FC = () => {
       <Tooltip label="Developer drawer" position="bottom">
         <ActionIcon
           onClick={() => setOpened(true)}
-          radius="xl"
+          radius="md"
           variant="filled"
           color="orange"
           sx={{ position: 'absolute', bottom: 0, right: 0, width: 50, height: 50 }}

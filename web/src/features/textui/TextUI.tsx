@@ -22,14 +22,15 @@ const useStyles = createStyles((theme, params: { position?: TextUiPosition }) =>
       params.position === 'left-center' ? 'flex-start' : 'center',
   },
   container: {
-    fontSize: 16,
     padding: 12,
     margin: 8,
-    backgroundColor: theme.colors.dark[6],
-    color: theme.colors.dark[0],
-    fontFamily: 'Roboto',
-    borderRadius: theme.radius.sm,
-    boxShadow: theme.shadows.sm,
+    borderRadius: "0.9259vh",
+    border: "0.0926vh solid #373737",
+    background: "radial-gradient(140.75% 140.75% at 50% 50%, rgba(26, 27, 30, 0.97) 0%, rgba(8, 8, 9, 0.87) 100%), linear-gradient(156deg, rgba(255, 255, 255, 0.00) 38.82%, rgba(255, 255, 255, 0.10) 131.78%)",
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontWeight: 500
   },
 }));
 
@@ -62,7 +63,10 @@ const TextUI: React.FC = () => {
                   size="lg"
                   animation={data.iconAnimation}
                   style={{
-                    color: data.iconColor,
+                    padding: "0.575vh",
+                    borderRadius: "0.463vh",
+                    background: "#FFF",
+                    color: "#1D1D1D",
                     alignSelf: !data.alignIcon || data.alignIcon === 'center' ? 'center' : 'start',
                   }}
                 />

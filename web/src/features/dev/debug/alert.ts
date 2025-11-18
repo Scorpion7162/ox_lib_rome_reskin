@@ -6,8 +6,8 @@ export const debugAlert = () => {
     {
       action: 'sendAlert',
       data: {
-        header: 'Hello there',
-        content: 'General kenobi  \n Markdown works',
+        header: 'Ernesto Valverde',
+        content: 'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
         centered: true,
         size: 'lg',
         overflow: true,

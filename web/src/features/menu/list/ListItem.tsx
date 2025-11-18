@@ -15,56 +15,75 @@ interface Props {
 
 const useStyles = createStyles((theme, params: { iconColor?: string }) => ({
   buttonContainer: {
-    backgroundColor: theme.colors.dark[6],
+    border: "1 solid rgba(255, 255, 255, 0.0)",
+    background: "rgba(66, 66, 66, 0.0)",
     borderRadius: theme.radius.md,
-    padding: 2,
-    height: 60,
-    scrollMargin: 8,
+    padding: "0.9259vh",
+    height: "4.6296vh",
+    scrollMargin: "0.7407vh",
     '&:focus': {
-      backgroundColor: theme.colors.dark[4],
+      background: "#37373746",
       outline: 'none',
     },
   },
   iconImage: {
-    maxWidth: 32,
+    maxWidth: "2.963vh",
   },
   buttonWrapper: {
-    paddingLeft: 5,
-    paddingRight: 12,
+    paddingLeft: "0.9259vh",
+    paddingRight: "0.9259vh",
     height: '100%',
   },
   iconContainer: {
     display: 'flex',
     alignItems: 'center',
-    width: 32,
-    height: 32,
+    width: "2.037vh",
+    height: "2.037vh",
   },
   icon: {
-    fontSize: 24,
-    color: params.iconColor || theme.colors.dark[2],
+    fontSize: "1.6667vh",
+    color: '#fff',
   },
   label: {
-    color: theme.colors.dark[2],
-    textTransform: 'uppercase',
-    fontSize: 12,
     verticalAlign: 'middle',
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: "1.15vh",
+    fontWeight: 600,
+    width: "12vh",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis"
   },
   chevronIcon: {
-    fontSize: 14,
-    color: theme.colors.dark[2],
+    width: "1.95vh",
+    height: "2vh",
+    borderRadius: "0.2778vh",
+    background: "#fff"
   },
   scrollIndexValue: {
-    color: theme.colors.dark[2],
-    textTransform: 'uppercase',
-    fontSize: 14,
+    paddingTop: ".35vh",
+    textAlign: "center",
+    width: "3.2407vh",
+    height: "2.2222vh",
+    borderRadius: "0.2778vh",
+    background: "rgba(217, 217, 217, 0.18)",
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: "0.9259vh",
+    fontWeight: 600,
+    letterSpacing: ".1vh"
   },
   progressStack: {
     width: '100%',
-    marginRight: 5,
+    marginRight: "0.463vh",
+    height: "110%"
   },
   progressLabel: {
-    verticalAlign: 'middle',
-    marginBottom: 3,
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: "1.25vh",
+    fontWeight: 600
   },
 }));
 
@@ -101,7 +120,7 @@ const ListItem = forwardRef<Array<HTMLDivElement | null>, Props>(({ item, index,
           <Group position="apart" w="100%">
             <Stack spacing={0} justify="space-between">
               <Text className={classes.label}>{item.label}</Text>
-              <Text>
+              <Text className='menuText'>
                 {typeof item.values[scrollIndex] === 'object'
                   ? // @ts-ignore for some reason even checking the type TS still thinks it's a string
                     item.values[scrollIndex].label
@@ -109,30 +128,42 @@ const ListItem = forwardRef<Array<HTMLDivElement | null>, Props>(({ item, index,
               </Text>
             </Stack>
             <Group spacing={1} position="center">
-              <LibIcon icon="chevron-left" className={classes.chevronIcon} />
+              <Box className={classes.chevronIcon} style={{
+                marginRight: "0.2778vh"
+              }}>
+                <LibIcon icon="chevron-left" style={{ display: "flex", marginTop: ".45vh", color: "#3D3D3D", paddingLeft: ".6vh", fontSize: "1.15vh" }} />
+              </Box>
               <Text className={classes.scrollIndexValue}>
                 {scrollIndex + 1}/{item.values.length}
               </Text>
-              <LibIcon icon="chevron-right" className={classes.chevronIcon} />
+              <Box className={classes.chevronIcon} style={{
+                marginLeft: "0.2778vh"
+              }}>
+                <LibIcon icon="chevron-right" style={{ display: "flex", marginTop: ".45vh", color: "#3D3D3D", paddingLeft: ".6vh", fontSize: "1.15vh" }} />
+              </Box>
             </Group>
           </Group>
         ) : item.checked !== undefined ? (
           <Group position="apart" w="100%">
-            <Text>{item.label}</Text>
+            <Text className='menuHeader'>{item.label}</Text>
             <CustomCheckbox checked={checked}></CustomCheckbox>
           </Group>
         ) : item.progress !== undefined ? (
           <Stack className={classes.progressStack} spacing={0}>
             <Text className={classes.progressLabel}>{item.label}</Text>
             <Progress
+              classNames={{
+                root: 'progressRoot2',
+                bar: 'progressBar2',
+              }}
               value={item.progress}
-              color={item.colorScheme || 'dark.0'}
               styles={(theme) => ({ root: { backgroundColor: theme.colors.dark[3] } })}
             />
           </Stack>
         ) : (
-          <Text>{item.label}</Text>
+          <Text className='menuHeader'>{item.label}</Text>
         )}
+
       </Group>
     </Box>
   );

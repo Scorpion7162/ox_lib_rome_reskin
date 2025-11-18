@@ -21,6 +21,12 @@ const DateField: React.FC<Props> = (props) => {
     <>
       {props.row.type === 'date' && (
         <DatePicker
+          classNames={{
+            root: "input-root",
+            label: "input-label",
+            input: "input-el4",
+            description: "input-description"
+          }}
           value={controller.field.value ? new Date(controller.field.value) : controller.field.value}
           name={controller.field.name}
           ref={controller.field.ref}
@@ -41,6 +47,12 @@ const DateField: React.FC<Props> = (props) => {
       )}
       {props.row.type === 'date-range' && (
         <DateRangePicker
+          classNames={{
+            root: "input-root",
+            label: "input-label",
+            input: "input-el",
+            description: "input-description"
+          }}
           value={
             controller.field.value
               ? controller.field.value[0]

@@ -12,28 +12,28 @@ const useStyles = createStyles((theme) => ({
   container: {
     width: 300,
     height: 'fit-content',
-    backgroundColor: theme.colors.dark[6],
-    color: theme.colors.dark[0],
     padding: 12,
-    borderRadius: theme.radius.sm,
-    fontFamily: 'Roboto',
-    boxShadow: theme.shadows.sm,
+    borderRadius: "0.9259vh",
+    border: "0.0926vh solid #373737",
+    background: "radial-gradient(140.75% 140.75% at 50% 50%, rgba(26, 27, 30, 0.97) 0%, rgba(8, 8, 9, 0.87) 100%), linear-gradient(156deg, rgba(255, 255, 255, 0.00) 38.82%, rgba(255, 255, 255, 0.10) 131.78%)"
   },
   title: {
-    fontWeight: 500,
-    lineHeight: 'normal',
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontWeight: 600
   },
   description: {
-    fontSize: 12,
-    color: theme.colors.dark[2],
-    fontFamily: 'Roboto',
-    lineHeight: 'normal',
+    color: "#989898",
+    fontFamily: "Inter",
+    fontsize: 12,
+    fontweight: 500,
   },
   descriptionOnly: {
+    color: "#FFF",
+    fontFamily: "Inter",
     fontSize: 14,
-    color: theme.colors.dark[2],
-    fontFamily: 'Roboto',
-    lineHeight: 'normal',
+    fontWeight: 600
   },
 }));
 
@@ -61,7 +61,7 @@ const getAnimation = (visible: boolean, position: string) => {
       animation = { from: 'X(0px)', to: 'X(-100%)' };
     } else if (position === 'top-center') {
       animation = { from: 'Y(0px)', to: 'Y(-100%)' };
-    } else if (position === 'bottom-center') {
+    } else if (position === 'bottom') {
       animation = { from: 'Y(0px)', to: 'Y(100%)' };
     } else {
       animation = { from: 'X(0px)', to: 'X(100%)' };
@@ -106,7 +106,7 @@ const Notifications: React.FC = () => {
     if (!data.icon) {
       switch (data.type) {
         case 'error':
-          data.icon = 'circle-xmark';
+          data.icon = 'ban';
           break;
         case 'success':
           data.icon = 'circle-check';
@@ -123,22 +123,22 @@ const Notifications: React.FC = () => {
     if (!data.iconColor) {
       switch (data.type) {
         case 'error':
-          iconColor = 'red.6';
+          iconColor = '#C53030';
           break;
         case 'success':
-          iconColor = 'teal.6';
+          iconColor = '#12B886';
           break;
         case 'warning':
           iconColor = 'yellow.6';
           break;
         default:
-          iconColor = 'blue.6';
+          iconColor = '#12A7B8';
           break;
       }
     } else {
       iconColor = tinycolor(data.iconColor).toRgbString();
     }
-
+    
     toast.custom(
       (t) => (
         <Box
@@ -193,12 +193,12 @@ const Notifications: React.FC = () => {
                 )}
               </>
             )}
-            <Stack spacing={0}>
+            <Stack spacing={3}>
               {data.title && <Text className={classes.title}>{data.title}</Text>}
               {data.description && (
                 <ReactMarkdown
                   components={MarkdownComponents}
-                  className={`${!data.title ? classes.descriptionOnly : classes.description} description`}
+                  className={`${!data.title ? classes.descriptionOnly : classes.description} description2`}
                 >
                   {data.description}
                 </ReactMarkdown>

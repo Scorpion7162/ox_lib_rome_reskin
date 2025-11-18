@@ -6,6 +6,7 @@ import ContextButton from './components/ContextButton';
 import { fetchNui } from '../../../utils/fetchNui';
 import ReactMarkdown from 'react-markdown';
 import HeaderButton from './components/HeaderButton';
+import HeaderButton2 from './components/HeaderButton2';
 import ScaleFade from '../../../transitions/ScaleFade';
 import MarkdownComponents from '../../../config/MarkdownComponents';
 
@@ -14,35 +15,22 @@ const openMenu = (id: string | undefined) => {
 };
 
 const useStyles = createStyles((theme) => ({
-  container: {
-    position: 'absolute',
-    top: '15%',
-    right: '25%',
-    width: 320,
-    height: 580,
-  },
-  header: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-    gap: 6,
-  },
   titleContainer: {
-    borderRadius: 4,
+    borderRadius: "0.3704vh",
     flex: '1 85%',
     backgroundColor: theme.colors.dark[6],
   },
   titleText: {
     color: theme.colors.dark[0],
-    padding: 6,
+    padding: "0.5556vh",
     textAlign: 'center',
   },
   buttonsContainer: {
-    height: 560,
+    height: "51.8519vh",
     overflowY: 'scroll',
   },
   buttonsFlexWrapper: {
-    gap: 3,
+    gap: "0.3389vh",
   },
 }));
 
@@ -60,7 +48,6 @@ const ContextMenu: React.FC = () => {
     fetchNui('closeContext');
   };
 
-  // Hides the context menu on ESC
   useEffect(() => {
     if (!visible) return;
 
@@ -85,14 +72,14 @@ const ContextMenu: React.FC = () => {
   });
 
   return (
-    <Box className={classes.container}>
+    <div className={"container"}>
       <ScaleFade visible={visible}>
-        <Flex className={classes.header}>
+        <Flex className={"header"}>
           {contextMenu.menu && (
-            <HeaderButton icon="chevron-left" iconSize={16} handleClick={() => openMenu(contextMenu.menu)} />
+            <HeaderButton2 icon="chevron-left" iconSize={16} handleClick={() => openMenu(contextMenu.menu)} />
           )}
-          <Box className={classes.titleContainer}>
-            <Text className={classes.titleText}>
+          <Box className={"titleContainer"}>
+            <Text className={"titleText"}>
               <ReactMarkdown components={MarkdownComponents}>{contextMenu.title}</ReactMarkdown>
             </Text>
           </Box>
@@ -106,7 +93,7 @@ const ContextMenu: React.FC = () => {
           </Stack>
         </Box>
       </ScaleFade>
-    </Box>
+    </div>
   );
 };
 

@@ -21,6 +21,13 @@ const SelectField: React.FC<Props> = (props) => {
     <>
       {props.row.type === 'select' ? (
         <Select
+          classNames={{
+            root: "input-root",
+            label: "input-label",
+            input: "input-el",
+            description: "input-description",
+            item: 'select-dropdown',
+          }}
           data={props.row.options}
           value={controller.field.value}
           name={controller.field.name}

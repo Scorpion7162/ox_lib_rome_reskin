@@ -5,7 +5,6 @@ export interface InputProps {
   rows: Array<IInput | ICheckbox | ISelect | INumber | ISlider | IColorInput | IDateInput | ITextarea | ITimeInput>;
   options?: {
     allowCancel?: boolean;
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   };
 }
 
@@ -77,6 +76,4 @@ export interface ITextarea extends BaseField<'textarea', string> {
   autosize?: boolean;
   min?: number;
   max?: number;
-  minLength?: number;
-  maxLength?: number;
 }

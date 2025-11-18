@@ -23,6 +23,12 @@ const InputField: React.FC<Props> = (props) => {
     <>
       {!props.row.password ? (
         <TextInput
+          classNames={{
+            root: "input-root",
+            label: "input-label",
+            input: "input-el",
+            description: "input-description"
+          }}
           {...props.register}
           defaultValue={props.row.default}
           label={props.row.label}
@@ -36,6 +42,12 @@ const InputField: React.FC<Props> = (props) => {
         />
       ) : (
         <PasswordInput
+          classNames={{
+            root: "input-root",
+            label: "input-label",
+            input: "input-el",
+            description: "input-description"
+          }}
           {...props.register}
           defaultValue={props.row.default}
           label={props.row.label}

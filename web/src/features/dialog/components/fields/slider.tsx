@@ -18,9 +18,15 @@ const SliderField: React.FC<Props> = (props) => {
 
   return (
     <Box>
-      <Text sx={{ fontSize: 14, fontWeight: 500 }}>{props.row.label}</Text>
+      <Text className='slideLabel'>{props.row.label}</Text>
       <Slider
-        mb={10}
+        classNames={{
+          mark: "marks",
+          thumb: "thumb",
+          root: "sliderRoot",
+          bar: "sliderBar"
+        }}
+        mb={"1.8519vh"}
         value={controller.field.value}
         name={controller.field.name}
         ref={controller.field.ref}
@@ -31,10 +37,10 @@ const SliderField: React.FC<Props> = (props) => {
         max={props.row.max}
         step={props.row.step}
         disabled={props.row.disabled}
-        marks={[
-          { value: props.row.min || 0, label: props.row.min || 0 },
-          { value: props.row.max || 100, label: props.row.max || 100 },
-        ]}
+        // marks={[
+        //   { value: props.row.min || 0, label: props.row.min || 0 },
+        //   { value: props.row.max || 100, label: props.row.max || 100 },
+        // ]}
       />
     </Box>
   );

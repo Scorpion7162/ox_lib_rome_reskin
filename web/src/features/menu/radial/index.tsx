@@ -16,34 +16,38 @@ const useStyles = createStyles((theme) => ({
     left: '50%',
     transform: 'translate(-50%, -50%)',
   },
-  sector: {
-    fill: theme.colors.dark[6],
-    color: theme.colors.dark[0],
-
+  hex: {
+    fill: "#161616ff",
+    stroke: "#373737",
+    strokeWidth: 1,
+    transition: 'fill 0.35s',
     '&:hover': {
-      fill: theme.fn.primaryColor(),
+      fill: "rgba(255, 255, 255, 1)",
       cursor: 'pointer',
-      '> g > text, > g > svg > path': {
-        fill: '#fff',
+      '& ~ g text': {
+        fill: '#000',
+      },
+      '& ~ g svg path': {
+        fill: '#000',
       },
     },
-    '> g > text': {
-      fill: theme.colors.dark[0],
-      strokeWidth: 0,
-    },
   },
-  backgroundCircle: {
-    fill: theme.colors.dark[6],
-  },
-  centerCircle: {
-    fill: theme.fn.primaryColor(),
-    color: '#fff',
-    stroke: theme.colors.dark[6],
-    strokeWidth: 4,
+  centerHex: {
+    opacity: ".9",
+    fill: "#ffffffff",
+    transition: 'opacity 0.3s',
     '&:hover': {
+      opacity: "1",
       cursor: 'pointer',
-      fill: theme.colors[theme.primaryColor][theme.fn.primaryShade() - 1],
     },
+  },
+  iconText: {
+    fill: '#fff',
+    pointerEvents: 'none',
+    textAnchor: 'middle',
+    fontFamily: "Inter",
+    fontSize: 10,
+    fontWeight: 600,
   },
   centerIconContainer: {
     position: 'absolute',
@@ -53,36 +57,45 @@ const useStyles = createStyles((theme) => ({
     pointerEvents: 'none',
   },
   centerIcon: {
-    color: '#fff',
+    color: '#373737',
   },
 }));
 
-const calculateFontSize = (text: string): number => {
-  if (text.length > 20) return 10;
-  if (text.length > 15) return 12;
-  return 13;
-};
+const roundedHexPath = (cx: number, cy: number, size: number, radius: number) => {
+  const angleStep = Math.PI / 3;
+  let path = '';
+  for (let i = 0; i < 6; i++) {
+    const angle = angleStep * i - Math.PI / 6;
+    const nextAngle = angleStep * (i + 1) - Math.PI / 6;
 
-const splitTextIntoLines = (text: string, maxCharPerLine: number = 15): string[] => {
-  const words = text.split(' ');
-  const lines: string[] = [];
-  let currentLine = words[0];
+    const x1 = cx + size * Math.cos(angle);
+    const y1 = cy + size * Math.sin(angle);
+    const x2 = cx + size * Math.cos(nextAngle);
+    const y2 = cy + size * Math.sin(nextAngle);
 
-  for (let i = 1; i < words.length; i++) {
-    if (currentLine.length + words[i].length + 1 <= maxCharPerLine) {
-      currentLine += ' ' + words[i];
-    } else {
-      lines.push(currentLine);
-      currentLine = words[i];
-    }
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const ux = dx / len;
+    const uy = dy / len;
+
+    const startX = x1 + ux * radius;
+    const startY = y1 + uy * radius;
+    const endX = x2 - ux * radius;
+    const endY = y2 - uy * radius;
+
+    if (i === 0) path += `M ${startX} ${startY}`;
+    else path += ` L ${startX} ${startY}`;
+
+    path += ` Q ${x2} ${y2} ${endX} ${endY}`;
   }
-  lines.push(currentLine);
-  return lines;
+  path += ' Z';
+  return path;
 };
 
-const PAGE_ITEMS = 6;
 
-const degToRad = (deg: number) => deg * (Math.PI / 180);
+const radius = 3;
+const PAGE_ITEMS = 6;
 
 const RadialMenu: React.FC = () => {
   const { classes } = useStyles();
@@ -98,11 +111,8 @@ const RadialMenu: React.FC = () => {
 
   const changePage = async (increment?: boolean) => {
     setVisible(false);
-
     const didTransition: boolean = await fetchNui('radialTransition');
-
     if (!didTransition) return;
-
     setVisible(true);
     setMenu({ ...menu, page: increment ? menu.page + 1 : menu.page - 1 });
   };
@@ -114,7 +124,7 @@ const RadialMenu: React.FC = () => {
       PAGE_ITEMS * menu.page - menu.page + 1
     );
     if (PAGE_ITEMS * menu.page - menu.page + 1 < menu.items.length) {
-      items[items.length - 1] = { icon: 'ellipsis-h', label: locale.ui.more, isMore: true };
+      items[items.length - 1] = { icon: 'ellipsis-h', label: locale.ui.more || "More", isMore: true };
     }
     setMenuItems(items);
   }, [menu.items, menu.page]);
@@ -135,123 +145,106 @@ const RadialMenu: React.FC = () => {
     setMenu({ ...menu, items: data });
   });
 
-  return (
-    <>
-      <Box
-        className={classes.wrapper}
-        onContextMenu={async () => {
-          if (menu.page > 1) await changePage();
-          else if (menu.sub) fetchNui('radialBack');
-        }}
-      >
-        <ScaleFade visible={visible}>
-          <svg
-            style={{ overflow: 'visible' }}
-            width={`${newDimension}px`}
-            height={`${newDimension}px`}
-            viewBox="0 0 350 350"
-            transform="rotate(90)"
-          >
-            {/* Fixed issues with background circle extending the circle when there's less than 3 items */}
-            <g transform="translate(175, 175)">
-              <circle r={175} className={classes.backgroundCircle} />
-            </g>
-            {menuItems.map((item, index) => {
-              const pieAngle = 360 / (menuItems.length < 3 ? 3 : menuItems.length);
-              const angle = degToRad(pieAngle / 2 + 90);
-              const gap = 1;
-              const radius = 175 * 0.65 - gap;
-              const sinAngle = Math.sin(angle);
-              const cosAngle = Math.cos(angle);
-              const iconYOffset = splitTextIntoLines(item.label, 15).length > 3 ? 3 : 0;
-              const iconX = 175 + sinAngle * radius;
-              const iconY = 175 + cosAngle * radius + iconYOffset; // Apply the Y offset to iconY
-              const iconWidth = Math.min(Math.max(item.iconWidth || 50, 0), 100);
-              const iconHeight = Math.min(Math.max(item.iconHeight || 50, 0), 100);
+  function truncateText(text: string, maxLength: number): string {
+    if (typeof text !== 'string') return '';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, Math.max(0, maxLength - 3)) + '...';
+  }
 
-              return (
-                <g
-                  transform={`rotate(-${index * pieAngle} 175 175) translate(${sinAngle * gap}, ${cosAngle * gap})`}
-                  className={classes.sector}
-                  onClick={async () => {
-                    const clickIndex = menu.page === 1 ? index : PAGE_ITEMS * (menu.page - 1) - (menu.page - 1) + index;
-                    if (!item.isMore) fetchNui('radialClick', clickIndex);
-                    else {
-                      await changePage(true);
-                    }
-                  }}
-                >
-                  <path
-                    d={`M175.01,175.01 l${175 - gap},0 A175.01,175.01 0 0,0 ${
-                      175 + (175 - gap) * Math.cos(-degToRad(pieAngle))
-                    }, ${175 + (175 - gap) * Math.sin(-degToRad(pieAngle))} z`}
-                  />
-                  <g transform={`rotate(${index * pieAngle - 90} ${iconX} ${iconY})`} pointerEvents="none">
-                    {typeof item.icon === 'string' && isIconUrl(item.icon) ? (
-                      <image
-                        href={item.icon}
-                        width={iconWidth}
-                        height={iconHeight}
-                        x={iconX - iconWidth / 2}
-                        y={iconY - iconHeight / 2 - iconHeight / 4}
-                      />
-                    ) : (
-                      <LibIcon
-                        x={iconX - 14.5}
-                        y={iconY - 17.5}
-                        icon={item.icon as IconProp}
-                        width={30}
-                        height={30}
-                        fixedWidth
-                      />
-                    )}
-                    <text
-                      x={iconX}
-                      y={iconY + (splitTextIntoLines(item.label, 15).length > 2 ? 15 : 28)}
-                      fill="#fff"
-                      textAnchor="middle"
-                      fontSize={calculateFontSize(item.label)}
-                      pointerEvents="none"
-                      lengthAdjust="spacingAndGlyphs"
-                    >
-                      {splitTextIntoLines(item.label, 15).map((line, index) => (
-                        <tspan x={iconX} dy={index === 0 ? 0 : '1.2em'} key={index}>
-                          {line}
-                        </tspan>
-                      ))}
-                    </text>
-                  </g>
+  // 🐝 Honeycomb layout konumları
+  // Üst 2, orta 2, alt 2 olacak şekilde (x,y koordinatları)
+  const hexSize = 50;
+  const gap = 5;
+  const horizontal = hexSize * Math.sqrt(3) + gap;
+  const vertical = hexSize * 1.5 + gap;
+
+  const positions = [
+    { x: 175 - horizontal / 2, y: 175 - vertical }, // üst sol
+    { x: 175 + horizontal / 2, y: 175 - vertical }, // üst sağ
+    { x: 175 - horizontal, y: 175 }, // orta sol
+    { x: 175 + horizontal, y: 175 }, // orta sağ
+    { x: 175 - horizontal / 2, y: 175 + vertical }, // alt sol
+    { x: 175 + horizontal / 2, y: 175 + vertical }, // alt sağ
+  ];
+
+  return (
+    <Box
+      className={classes.wrapper}
+      onContextMenu={async () => {
+        if (menu.page > 1) await changePage();
+        else if (menu.sub) fetchNui('radialBack');
+      }}
+    >
+      <ScaleFade visible={visible}>
+        <svg
+          style={{ overflow: 'visible' }}
+          width={`${newDimension}px`}
+          height={`${newDimension}px`}
+          viewBox="0 0 350 350"
+        >
+          {/* 6 dış altıgen */}
+          {menuItems.slice(0, 6).map((item, index) => {
+            const { x, y } = positions[index];
+            return (
+              <g
+                key={index}
+                onClick={async () => {
+                  const clickIndex = menu.page === 1 ? index : PAGE_ITEMS * (menu.page - 1) - (menu.page - 1) + index;
+                  if (!item.isMore) fetchNui('radialClick', clickIndex);
+                  else await changePage(true);
+                }}
+              >
+                <path d={roundedHexPath(x, y, hexSize, radius)} className={classes.hex} />
+                <g transform={`translate(${x}, ${y + 5})`} pointerEvents="none">
+                  {typeof item.icon === 'string' && isIconUrl(item.icon) ? (
+                    <image href={item.icon} width={30} height={30} x={-15} y={-35} />
+                  ) : (
+                    <LibIcon
+                      icon={item.icon as IconProp}
+                      x={-13}
+                      y={-30}
+                      width={26}
+                      height={26}
+                      fixedWidth
+                    />
+                  )}
+                  <text className={classes.iconText} x={0} y={15}>
+                    {truncateText(item.label, 14)}
+                  </text>
                 </g>
-              );
-            })}
-            <g
-              transform={`translate(175, 175)`}
-              onClick={async () => {
-                if (menu.page > 1) await changePage();
+              </g>
+            );
+          })}
+
+          {/* Merkez altıgen */}
+          <g
+            transform={`translate(175,175)`}
+            onClick={async () => {
+              if (menu.page > 1) await changePage();
+              else {
+                if (menu.sub) fetchNui('radialBack');
                 else {
-                  if (menu.sub) fetchNui('radialBack');
-                  else {
-                    setVisible(false);
-                    fetchNui('radialClose');
-                  }
+                  setVisible(false);
+                  fetchNui('radialClose');
                 }
-              }}
-            >
-              <circle r={28} className={classes.centerCircle} />
-            </g>
-          </svg>
-          <div className={classes.centerIconContainer}>
-            <LibIcon
-              icon={!menu.sub && menu.page < 2 ? 'xmark' : 'arrow-rotate-left'}
-              fixedWidth
-              className={classes.centerIcon}
-              color="#fff"
-              size="2x"
-            />
-          </div>
-        </ScaleFade>
-      </Box>
-    </>
+              }
+            }}
+          >
+            <path d={roundedHexPath(0, 0, 45, radius)} className={classes.centerHex} />
+          </g>
+        </svg>
+
+        <div className={classes.centerIconContainer}>
+          <LibIcon
+            icon={!menu.sub && menu.page < 2 ? 'xmark' : 'arrow-rotate-left'}
+            fixedWidth
+            className={classes.centerIcon}
+            color="#fff"
+            size="2x"
+          />
+        </div>
+      </ScaleFade>
+    </Box>
   );
 };
 

@@ -11,6 +11,12 @@ interface Props {
 const CheckboxField: React.FC<Props> = (props) => {
   return (
     <Checkbox
+    classNames={{
+      label: "checkboxLabel",
+      input: "checkboxInput",
+      icon: "checboxicon"
+    }}
+      radius={50}
       {...props.register}
       sx={{ display: 'flex' }}
       required={props.row.required}

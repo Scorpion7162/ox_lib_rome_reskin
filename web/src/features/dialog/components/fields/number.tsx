@@ -20,6 +20,14 @@ const NumberField: React.FC<Props> = (props) => {
 
   return (
     <NumberInput
+      classNames={{
+        root: "input-root",
+        label: "input-label",
+        input: "input-el2",
+        description: "input-description",
+        rightSection: "rightSection",
+        control: "input-section",
+      }}
       value={controller.field.value}
       name={controller.field.name}
       ref={controller.field.ref}

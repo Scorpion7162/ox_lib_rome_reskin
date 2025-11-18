@@ -20,6 +20,13 @@ const ColorField: React.FC<Props> = (props) => {
 
   return (
     <ColorInput
+      classNames={{
+        root: "input-root",
+        label: "input-label",
+        input: "input-el3",
+        description: "input-description",
+        dropdown: "dropdown",
+      }}
       withEyeDropper={false}
       value={controller.field.value}
       name={controller.field.name}

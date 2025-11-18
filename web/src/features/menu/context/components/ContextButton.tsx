@@ -19,61 +19,17 @@ const useStyles = createStyles((theme, params: { disabled?: boolean; readOnly?: 
   inner: {
     justifyContent: 'flex-start',
   },
-  label: {
-    width: '100%',
-    color: params.disabled ? theme.colors.dark[3] : theme.colors.dark[0],
-    whiteSpace: 'pre-wrap',
-  },
-  button: {
-    height: 'fit-content',
-    width: '100%',
-    padding: 10,
-    '&:hover': {
-      backgroundColor: params.readOnly ? theme.colors.dark[6] : undefined,
-      cursor: params.readOnly ? 'unset' : 'pointer',
-    },
-    '&:active': {
-      transform: params.readOnly ? 'unset' : undefined,
-    },
-  },
   iconImage: {
-    maxWidth: '25px',
-  },
-  description: {
-    color: params.disabled ? theme.colors.dark[3] : theme.colors.dark[2],
-    fontSize: 12,
-  },
-  dropdown: {
-    padding: 10,
-    color: theme.colors.dark[0],
-    fontSize: 14,
-    maxWidth: 256,
-    width: 'fit-content',
-    border: 'none',
+    maxWidth: '2.3148vh',
   },
   buttonStack: {
-    gap: 4,
+    gap: "0.1852vh",
     flex: '1',
   },
   buttonGroup: {
-    gap: 4,
+    gap: "0.3704vh",
     flexWrap: 'nowrap',
-  },
-  buttonIconContainer: {
-    width: 25,
-    height: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonTitleText: {
-    overflowWrap: 'break-word',
-  },
-  buttonArrowContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 25,
-    height: 25,
-  },
+  }
 }));
 
 const ContextButton: React.FC<{
@@ -92,7 +48,7 @@ const ContextButton: React.FC<{
       >
         <HoverCard.Target>
           <Button
-            classNames={{ inner: classes.inner, label: classes.label, root: classes.button }}
+            className={"buttonsFlexWrapper"}
             onClick={() =>
               !button.disabled && !button.readOnly
                 ? button.menu
@@ -108,43 +64,47 @@ const ContextButton: React.FC<{
                 {(button.title || Number.isNaN(+buttonKey)) && (
                   <Group className={classes.buttonGroup}>
                     {button?.icon && (
-                      <Stack className={classes.buttonIconContainer}>
+                      <Stack className={"buttonIconContainer"}>
                         {typeof button.icon === 'string' && isIconUrl(button.icon) ? (
-                          <img src={button.icon} className={classes.iconImage} alt="Missing img" />
+                          <img src={button.icon} className={classes.iconImage} alt="" />
                         ) : (
                           <LibIcon
                             icon={button.icon as IconProp}
                             fixedWidth
-                            size="lg"
-                            style={{ color: button.iconColor }}
+                            size="sm"
+                            className='contexticon'
+                            style={{ marginLeft: "-.25vh", color: button.disabled ? '#afafafff' : '#FFFFFF' }}
                             animation={button.iconAnimation}
                           />
                         )}
                       </Stack>
                     )}
-                    <Text className={classes.buttonTitleText}>
+                    <Text className={"buttonTitleText"}>
                       <ReactMarkdown components={MarkdownComponents}>{button.title || buttonKey}</ReactMarkdown>
                     </Text>
                   </Group>
                 )}
                 {button.description && (
-                  <Text className={classes.description}>
+                  <Text className={"description"}>
                     <ReactMarkdown components={MarkdownComponents}>{button.description}</ReactMarkdown>
                   </Text>
                 )}
                 {button.progress !== undefined && (
-                  <Progress value={button.progress} size="sm" color={button.colorScheme || 'dark.3'} />
+                  <Progress   classNames={{
+                    root: 'progressRoot',
+                    bar: 'progressBar'
+                  }} value={button.progress} size="sm" color={button.colorScheme || 'dark.3'} />
                 )}
               </Stack>
               {(button.menu || button.arrow) && button.arrow !== false && (
-                <Stack className={classes.buttonArrowContainer}>
-                  <LibIcon icon="chevron-right" fixedWidth />
+                <Stack className={"buttonArrowContainer"}>
+                  <LibIcon className={"arrowIcon"} icon="chevron-right" fixedWidth />
                 </Stack>
               )}
             </Group>
           </Button>
         </HoverCard.Target>
-        <HoverCard.Dropdown className={classes.dropdown}>
+        <HoverCard.Dropdown className={"contextButtonHover"}>
           {button.image && <Image src={button.image} />}
           {Array.isArray(button.metadata) ? (
             button.metadata.map(
@@ -153,9 +113,9 @@ const ContextButton: React.FC<{
                 index: number
               ) => (
                 <>
-                  <Text key={`context-metadata-${index}`}>
+                  <div className='contextButtonText' key={`context-metadata-${index}`}>
                     {typeof metadata === 'string' ? `${metadata}` : `${metadata.label}: ${metadata?.value ?? ''}`}
-                  </Text>
+                  </div>
 
                   {typeof metadata === 'object' && metadata.progress !== undefined && (
                     <Progress

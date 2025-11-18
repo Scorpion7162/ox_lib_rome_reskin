@@ -8,7 +8,8 @@ export const debugContext = () => {
       data: {
         title: 'Vehicle garage',
         options: [
-          { title: 'Empty button' },
+          { title: 'Empty button',
+            description: 'Example button description', },
           {
             title: 'Karin Kuruma',
             image: 'https://cdn.discordapp.com/attachments/1063098499027173461/1064276343585505330/screenshot.jpg',

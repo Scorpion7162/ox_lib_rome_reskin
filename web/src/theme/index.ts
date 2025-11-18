@@ -2,8 +2,8 @@ import { MantineThemeOverride } from '@mantine/core';
 
 export const theme: MantineThemeOverride = {
   colorScheme: 'dark',
-  fontFamily: 'Roboto',
-  shadows: { sm: '1px 1px 3px rgba(0, 0, 0, 0.5)' },
+  fontFamily: 'Inter',
+  shadows: { sm: '0.0926vh 0.0926vh 0.2778vh rgba(0, 0, 0, 0.5)' },
   components: {
     Button: {
       styles: {
