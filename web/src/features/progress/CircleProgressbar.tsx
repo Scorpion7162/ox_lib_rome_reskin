@@ -109,7 +109,7 @@ const CircleProgressbar: React.FC = () => {
           <Box className={classes.container}>
             {/* <Stack spacing={0} align="center" className={classes.wrapper}> */}
               <RingProgress
-                size={75}
+                size={69}
                 thickness={6}
                 sections={[{ value: 0, color: theme.primaryColor }]}
                 onAnimationEnd={() => setVisible(false)}
